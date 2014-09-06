@@ -1,22 +1,23 @@
-var five        = require('johnny-five'),
-    request     = require('request'),
-    board       = new five.Board(),
-    numberRows  = 2,
-    numberCols  = 16,
-    currentCity = 'London',
-    countryCode = 'UK',
-    tempFormat  = 'C',
+var five          = require('johnny-five'),
+    request       = require('request'),
+    board         = new five.Board(),
+    numberRows    = 2,
+    numberCols    = 16,
+    currentCity   = 'London',
+    countryCode   = 'UK',
+    requestString = '',
+    tempFormat    = 'C',
     temp, 
     tempLow, 
     tempHigh, 
     description;
 
-function kelvinToCelsius( input ) {
+function kelvinToC ( input ) {
   input -= 273.15;
   return parseInt(input);
 }
 
-function kelvinToFahrenheit( input ) {
+function kelvinToF ( input ) {
   input = (input - 273.15) * 1.8000 + 32.00;
   return parseInt(input);
 }
@@ -42,7 +43,7 @@ board.on('ready', function () {
       console.log('Request successful');
 
       var weatherData = JSON.parse(body),
-          conFs       = tempFormat === 'C' ? kelvinToCelsius : kelvinToFahrenheit;
+          conFs       = tempFormat === 'C' ? kelvinToC : kelvinToF;
 
       if ( ['C', 'F'].indexOf(tempFormat) === -1 ) return console.log('Temp format error', tempFormat);
 
