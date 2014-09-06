@@ -58,28 +58,6 @@ board.on('ready', function () {
     });
   });
 
-  function _loop () {
-
-    // Clear 2nd line
-    lcd.setCursor(0, numberRows - 1).print('                ');
-
-    switch ( secondLine ) {
-      case 0:
-        lcd.setCursor(0, numberRows - 1).print(description);
-        break;
-      case 1:
-        lcd.setCursor(0, numberRows - 1).print('High of ' + tempHigh + ':deg:' + tempFormat);
-        break;
-      case 2:
-        lcd.setCursor(0, numberRows - 1).print('Low of ' + tempLow + ':deg:' + tempFormat);
-        break;
-    }
-
-    secondLine++;
-
-    if ( secondLine >= numberMessages ) secondLine = 0;
-  }
-
   function startLoop () {
 
     var degCharMap      = [4,10,4,0,0,0,0], // Custom degree symbol
@@ -92,9 +70,29 @@ board.on('ready', function () {
     lcd.setCursor(numberCols-4, 0).print(temp).setCursor(numberCols-2, 0).print(':deg:');
     lcd.setCursor(numberCols-1, 0).print(tempFormat);
 
-    // _loop
+    function _loop () {
+
+      lcd.setCursor(0, numberRows - 1).print('                ');
+
+      switch ( secondLine ) {
+        case 0:
+          lcd.setCursor(0, numberRows - 1).print(description);
+          break;
+        case 1:
+          lcd.setCursor(0, numberRows - 1).print('High of ' + tempHigh + ':deg:' + tempFormat);
+          break;
+        case 2:
+          lcd.setCursor(0, numberRows - 1).print('Low of ' + tempLow + ':deg:' + tempFormat);
+          break;
+      }
+
+      secondLine++;
+
+      if ( secondLine >= numberMessages ) secondLine = 0;
+    }
 
     board.loop( loopDelay, _loop );
+    _loop(); // First time
   }
 });
 
