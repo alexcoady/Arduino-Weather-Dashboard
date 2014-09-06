@@ -44,9 +44,11 @@ board.on('ready', function () {
       console.log('Request successful');
 
       var weatherData = JSON.parse(body),
-          conFs       = tempFormat === 'C' ? kelvinToC : kelvinToF;
+          conFs;
 
       if ( ['C', 'F'].indexOf(tempFormat) === -1 ) return console.log('Temp format error', tempFormat);
+
+      conFs = tempFormat === 'C' ? kelvinToC : kelvinToF
 
       temp      = conFs( weatherData.main.temp );
       tempLow   = conFs( weatherData.main.temp_min );
@@ -54,11 +56,11 @@ board.on('ready', function () {
 
       description = weatherData.weather[0].description;
 
-      startLoop();
+      render();
     });
   });
 
-  function startLoop () {
+  function render () {
 
     var degCharMap      = [4,10,4,0,0,0,0], // Custom degree symbol
         secondLine      = 0,
@@ -72,7 +74,8 @@ board.on('ready', function () {
 
     function _loop () {
 
-      lcd.setCursor(0, numberRows - 1).print('                ');
+      // Wipe 2nd line (fill with empty characters)
+      lcd.setCursor(0, numberRows - 1).print( new Array(numberCols).join(' ') );
 
       switch ( secondLine ) {
         case 0:
